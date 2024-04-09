@@ -1,9 +1,16 @@
 import { Search, MoreHorizontal, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react"
+import dayjs from "dayjs"
+import "dayjs/locale/pt-br"
+import relativeTime from "dayjs/plugin/relativeTime"
 import { IconButton } from "./icon-button"
 import { Table } from "./table/table"
 import { TableHeader } from "./table/table-header"
 import { TableCell } from "./table/table-cell"
 import { TableRow } from "./table/table-row"
+import { attendees } from "../data/attendees"
+
+dayjs.extend(relativeTime)
+dayjs.locale("pt-br")
 
 export function AttendeeList() {
   return (
@@ -33,21 +40,21 @@ export function AttendeeList() {
         </thead>
 
         <tbody>
-          {Array.from({ length: 8 }).map((_, i) => {
+          {attendees.map((attendee) => {
             return (
-              <TableRow key={i} className="border-b border-white/10 hover:bg-white/5">
+              <TableRow key={attendee.id} className="border-b border-white/10 hover:bg-white/5">
                 <TableCell>
                   <input type="checkbox" className="size-4 bg-black/20 rounded border border-white/10 checked:bg-orange-400" />
                 </TableCell>
-                <TableCell>123456</TableCell>
+                <TableCell>{attendee.id}</TableCell>
                 <TableCell>
                   <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-white">Gabriel Rocha da Silva</span>
-                    <span>gabriel@rochasphere.com</span>
+                    <span className="font-semibold text-white">{attendee.name}</span>
+                    <span>{attendee.email}</span>
                   </div>
                 </TableCell>
-                <TableCell>7 dias atrás</TableCell>
-                <TableCell>3 dias atrás</TableCell>
+                <TableCell>{dayjs().to(attendee.createdAt)}</TableCell>
+                <TableCell>{dayjs().to(attendee.checkedInAt)}</TableCell>
                 <TableCell>
                   <IconButton transparent>
                     <MoreHorizontal className="size-4" />
